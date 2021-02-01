@@ -11,7 +11,7 @@ defmodule LiveViewStudioWeb.FilterLive do
         prices: []
       )
 
-    {:ok, socket}
+    {:ok, socket, temporay_assigns: [boats: []]}
   end
 
   def render(assigns) do
