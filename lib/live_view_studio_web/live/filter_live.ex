@@ -26,10 +26,7 @@ defmodule LiveViewStudioWeb.FilterLive do
           <div class="prices">
             <input type="hidden" name="prices[]" value="" />
             <%= for price <- ["$", "$$", "$$$"] do %>
-              <input type="checkbox" id="<%= price %>"
-                    name="prices[]" values="<%= price %>"
-                    <%= if price in @prices, do: "checked" %> />
-              <label for="<%= price %>"><%= price %></label>
+              <%= price_checkbox(price: price, checked: price in @prices) %>
             <% end %>
           </div>
         </div>
@@ -64,6 +61,17 @@ defmodule LiveViewStudioWeb.FilterLive do
     boats = Boats.list_boats(params)
     socket = assign(socket, params ++ [boats: boats])
     {:noreply, socket}
+  end
+
+  defp price_checkbox(assigns) do
+    assigns = Enum.into(assigns, %{})
+
+    ~L"""
+    <input type="checkbox" id="<%= @price %>"
+           name="prices[]" value="<%= @price %>"
+           <%= if @checked, do: "checked" %> />
+    <label for="<%= @price %>"><%= @price %></label>
+    """
   end
 
   defp type_options do
