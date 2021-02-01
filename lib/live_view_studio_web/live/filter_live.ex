@@ -18,6 +18,14 @@ defmodule LiveViewStudioWeb.FilterLive do
     ~L"""
     <h1>Daily Boat Rentals</h1>
     <div id="filter">
+      <form phx-change="filter">
+        <div class="filters">
+          <select name="type" id="">
+            <%= options_for_select(type_options(), @type) %>
+          </select>
+        </div>
+      </form>
+
       <div class="boats">
         <%= for boat <- @boats do %>
           <div class="card">
@@ -41,4 +49,20 @@ defmodule LiveViewStudioWeb.FilterLive do
     </div>
     """
   end
+
+  def handle_event("filter", %{"type" => type}, socket) do
+    boats = Boats.list_boats(type: type)
+    socket = assign(socket, boats: boats, type: type)
+    {:noreply, socket}
+  end
+
+  defp type_options do
+    [
+      "All Types": "",
+      Fishing: "fishing",
+      Sporting: "sporting",
+      Sailing: "sailing"
+    ]
+  end
+
 end
